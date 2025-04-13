@@ -56,23 +56,21 @@
     return urlParams.get(param);
   }
 
-  const hlsStreamUrl = getQueryParam("file");
+  // Default HLS stream URL (you can replace this with your preferred default stream)
+  const defaultStreamUrl = "https://v18tataplaysyndication.akamaized.net/bpk-tv/StarSports_2_Hin_HD_voot_MOB/output03/hdntl=exp=1744624211~acl=/*~data=hdntl~hmac=ef804b0f801800fd2e3adee93218285ccd687531abe037f331bfe24a39276fa1/StarSports_2_Hin_HD_voot_MOB-audio_108038_hin=108000-video=1275600.m3u8";
 
-  if (!hlsStreamUrl) {
-    alert("No HLS stream URL provided. Please add a 'file' parameter to the URL.");
-  } else {
-    jwplayer("jwplayerDiv").setup({
-      file: hlsStreamUrl,
-      width: "100%",
-      height: "100%",
-      aspectratio: "16:9",
-      autostart: true,
-      mute: false,
-      type: "hls",
-      preload: "auto",
-      cast: { appid: "CC1AD845" }
-    });
-  }
+  const streamUrl = getQueryParam("file") || defaultStreamUrl; // Use the URL from query string or default if not provided
+
+  jwplayer("jwplayerDiv").setup({
+    file: streamUrl,
+    width: "100%",
+    height: "100%",
+    aspectratio: "16:9",
+    autostart: true,
+    mute: false,
+    preload: "auto",
+    cast: { appid: "CC1AD845" }
+  });
 </script>
   
 
