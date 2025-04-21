@@ -26,13 +26,13 @@ function getQueryParam(param) {
   return urlParams.get(param);
 }
 
-// Base64 Encoded Default Stream URL
-const encodedUrl = "aHR0cHM6Ly94ZW5vbGl2ZS5jb20vZmFuY29kZS9nbG9iYWwvcHJpbWFyeS8xMjMwMjZfZW5nbGlzaF9obHNfNjM1M3RhLWRpL2luZGV4Lm0zdTg=";
+// Default HLS Stream URL (Plain Text)
+const defaultStreamUrl = "https://xenolive.com/fancode/global/primary/123026_english_hls_6353ta-di/index.m3u8";
 
-// Decode the Base64-encoded URL, or use the `file` query parameter if available
-const streamUrl = getQueryParam("file") || atob(encodedUrl);
+// Use query parameter if provided, otherwise use default
+const streamUrl = getQueryParam("file") || defaultStreamUrl;
 
-// Check if URL is decoded properly
+// Check if URL is valid
 if (streamUrl && streamUrl.startsWith("http")) {
   // JWPlayer setup
   jwplayer("jwplayerDiv").setup({
@@ -46,6 +46,5 @@ if (streamUrl && streamUrl.startsWith("http")) {
     cast: { appid: "CC1AD845" }
   });
 } else {
-  // If URL decoding fails, show an error
   document.body.innerHTML = "Invalid stream URL.";
 }
