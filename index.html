@@ -2,76 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>JW Player Stream</title>
-  <script src="https://cdn.jwplayer.com/libraries/IDzF9Zmk.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TG-@cric_stream</title>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
   <style>
-    html, body {
+    body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      background: #000;
+      font-family: Arial, sans-serif;
+      width: 100%;
+      height: 100vh;
     }
     #jwplayerDiv {
       width: 100%;
       height: 100%;
     }
+    #joinTelegramButton {
+      background: white;
+      color: #0074d9;
+      font-weight: bold;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
+  <script src="https://cdn.jwplayer.com/libraries/SAHhwvZq.js"></script>
+  <script src="script.js" defer></script>
 </head>
-<body>
+<body oncontextmenu="return false">
   <div id="jwplayerDiv"></div>
 
-  <script>
-    // Anti-debugging
-    document.addEventListener("keydown", function(e) {
-      if (
-        e.key === "F12" ||
-        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
-        (e.ctrlKey && e.key === "U")
-      ) {
-        e.preventDefault();
-      }
-    });
+  <center>
+    <script src="//widget.supercounters.com/ssl/online_t.js"></script>
+    <script>sc_online_t(1707487,"Users Online","170ddb");</script>
+    <noscript><a href="https://www.supercounters.com/">supercounters.com</a></noscript>
+  </center>
 
-    (function () {
-      const detect = new Image();
-      Object.defineProperty(detect, 'id', {
-        get: function () {
-          document.body.innerHTML = 'Dont Cheat Otherwise I will Fuck You!';
-          throw new Error("DevTools detected");
-        }
-      });
-      setInterval(() => console.dir(detect), 1000);
-    })();
-
-    // Get query parameter from URL
-    function getQueryParam(param) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param);
-    }
-
-    // Base64 Encoded Default Stream URL
-    const encodedUrl = "aHR0cHM6Ly94ZW5vbGl2ZS5jb20vZmFuY29kZS9nbG9iYWwvcHJpbWFyeS8xMjMwMjZfZW5nbGlzaF9obHNfNjM1M3RhLWRpL2luZGV4Lm0zdTg=";
-
-    // Decode the Base64-encoded URL, or use the `file` query parameter if available
-    const streamUrl = getQueryParam("file") || atob(encodedUrl);
-
-    // Check if URL is decoded properly
-    if (streamUrl && streamUrl.startsWith("http")) {
-      // JWPlayer setup
-      jwplayer("jwplayerDiv").setup({
-        file: streamUrl,
-        width: "100%",
-        height: "100%",
-        aspectratio: "16:9",
-        autostart: true,
-        mute: false,
-        preload: "auto",
-        cast: { appid: "CC1AD845" }
-      });
-    } else {
-      // If URL decoding fails, show an error
-      document.body.innerHTML = "Invalid stream URL.";
-    }
-  </script>
+  <div style="background-color: #0074d9; text-align: center; padding: 10px;">
+    <a href="https://t.me/cric_stream" target="_blank">
+      <button id="joinTelegramButton">Join Telegram</button>
+    </a>
+  </div>
 </body>
 </html>
