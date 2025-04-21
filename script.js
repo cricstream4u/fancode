@@ -9,7 +9,7 @@ document.addEventListener("keydown", function(e) {
   }
 });
 
-(function() {
+(function () {
   const detect = new Image();
   Object.defineProperty(detect, 'id', {
     get: function () {
@@ -27,8 +27,7 @@ function getQueryParam(param) {
 }
 
 // Base64 Encoded Default Stream URL
-const encodedUrl = "aHR0cHM6Ly94ZW5vbGl2ZS5jb20vZmFuY29kZS9nbG9iYWwvcHJpbWFyeS8xMjMwMjZfZW5nbGlzaF9obHNfNjM1M3RhLWRpL2luZGV4Lm0zdTg=
-  ";
+const encodedUrl = "aHR0cHM6Ly94ZW5vbGl2ZS5jb20vZmFuY29kZS9nbG9iYWwvcHJpbWFyeS8xMjMwMjZfZW5nbGlzaF9obHNfNjM1M3RhLWRpL2luZGV4Lm0zdTg=";
 
 // Decode the Base64-encoded URL, or use the `file` query parameter if available
 const streamUrl = getQueryParam("file") || atob(encodedUrl);
