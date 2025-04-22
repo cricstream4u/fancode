@@ -27,7 +27,7 @@ function getQueryParam(param) {
 }
 
 // Default HLS Stream URL (Plain Text)
-const defaultStreamUrl = "https://xenolive.com/fancode/global/primary/123026_english_hls_6353ta-di/index.m3u8";
+const defaultStreamUrl = "https://xenolive.com/fancode/global/primary/123027_english_hls_5416adfreeta-di/540p.m3u8";
 
 // Use query parameter if provided, otherwise use default
 const streamUrl = getQueryParam("file") || defaultStreamUrl;
