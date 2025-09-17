@@ -1,171 +1,85 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Movies Streaming by Asif Ansari</title>
-  <link rel="shortcut icon" type="image/x-icon" href="Cric stream Favicon.jpg" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jwplayer.com/libraries/IDzF9Zmk.js"></script>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-database-compat.js"></script>
-
+  <meta charset="UTF-8">
+  <title>Fancode Live Matches</title>
   <style>
-    body {
-      all: unset;
-      font-family: Arial, sans-serif;
+    body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 20px; }
+    .matches { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
+    .match-card {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.2s;
     }
-
-    @keyframes marquee {
-      from { transform: translateX(0%); }
-      to { transform: translateX(-100%); }
+    .match-card:hover { transform: scale(1.02); }
+    .match-card img { width: 100%; max-width: 180px; border-radius: 8px; margin-bottom: 10px; }
+    .match-info { flex: 1; }
+    .status { font-weight: bold; color: green; }
+    .status.UPCOMING { color: orange; }
+    .play-btn {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
     }
-
-    #jwplayerDiv {
-      aspect-ratio: 16 / 9;
-    }
+    .play-btn:hover { background: #0056b3; }
   </style>
 </head>
-
-<body oncontextmenu="return false">
-  <!-- 🔵 Header -->
-  <header class="p-4 bg-blue-900 text-white text-center">
-    <a href="https://cinearena.live">
-      <img src="cineheader.png" class="h-10 mx-auto" alt="Cine Arena">
-    </a>
-  </header>
-
-  <!-- 🟢 Scrolling Marquee -->
-  <div class="flex items-center w-full bg-green-800">
-    <h4 class="shrink-0 m-0 text-lg text-white px-2">UPDATES:</h4>
-    <div class="overflow-hidden whitespace-nowrap flex-grow">
-      <p class="inline-block m-0 text-base text-white bg-red-600 px-2 py-1 animate-marquee" style="animation: marquee 50s linear infinite;">
-        If video not play refresh once and wait for few seconds...
-      </p>
-    </div>
-  </div>
-
-  <!-- 🟣 Video Container -->
-  <div class="w-full px-2 md:max-w-3xl md:mx-auto mt-4">
-    <div id="jwplayerDiv" class="w-full rounded-md overflow-hidden bg-black"></div>
-  </div>
+<body>
+  <h1>📺 Fancode streaming by Asif Ansari</h1>
+  <div id="matches" class="matches"></div>
 
   <script>
-    // 🔧 Replace with your Firebase project credentials
-    const firebaseConfig = {
-      apiKey: "AIzaSyBd6C_0v-_zNlHORR-feW7QiuE0s-fWJyo",
-      authDomain: "online-video-streaming-990fd.firebaseapp.com",
-      databaseURL: "https://online-video-streaming-990fd.firebaseio.com",
-      projectId: "online-video-streaming-990fd",
-      storageBucket: "online-video-streaming-990fd.firebasestorage.app",
-      messagingSenderId: "816598714377",
-      appId: "1:816598714377:web:f61a7c1026f34aecac90d8"
-    };
+    async function loadMatches() {
+      const url = "https://raw.githubusercontent.com/drmlive/fancode-live-events/main/fancode.json";
+      const response = await fetch(url);
+      const data = await response.json();
 
-    // Firebase Initialization
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    const playerStateRef = db.ref("playerState");
+      const matchesDiv = document.getElementById("matches");
 
-    // Get stream URL
-   // Anti-debugging
-document.addEventListener("keydown", function(e) {
-  if (
-    e.key === "F12" ||
-    (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
-    (e.ctrlKey && e.key === "U")
-  ) {
-    e.preventDefault();
-  }
-});
+      data.matches.forEach(match => {
+        const card = document.createElement("div");
+        card.className = "match-card";
 
-(function() {
-  const detect = new Image();
-  Object.defineProperty(detect, 'id', {
-    get: function () {
-      document.body.innerHTML = 'Dont Cheat Otherwise I will Fuck You!';
-      throw new Error("DevTools detected");
+        card.innerHTML = `
+          <img src="${match.src}" alt="${match.match_name}">
+          <div class="match-info">
+            <h3>${match.title}</h3>
+            <p><strong>${match.team_1}</strong> vs <strong>${match.team_2}</strong></p>
+            <p>🏆 ${match.event_name}</p>
+            <p>🕒 ${match.startTime}</p>
+            <p class="status ${match.status}">${match.status}</p>
+          </div>
+          <button class="play-btn">▶ Play</button>
+        `;
+
+        card.querySelector(".play-btn").addEventListener("click", () => {
+          if (match.adfree_url) {
+            // Cut everything after `.m3u8`
+            let cleanUrl = match.adfree_url;
+            console.log("Opening clean adfree_url:", cleanUrl);
+            window.open(cleanUrl, "_blank");
+          } else {
+            alert("No adfree_url available for this match!");
+          }
+        });
+
+        matchesDiv.appendChild(card);
+      });
     }
-  });
-  setInterval(() => console.dir(detect), 1000);
-})();
 
-// Get query parameter from URL
-function getQueryParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
-}
-
-// Base64 Encoded Default Stream URL
-const encodedUrl = "https%3A%2F%2Fdai.fancode.com%2Fprimary%2F123522_english_hls_60901ta-di_h264%2Findex.m3u8";
-
-// Decode the Base64-encoded URL, or use the `file` query parameter if available
-const streamUrl = getQueryParam("file") || atob(encodedUrl);
-
-// Check if URL is decoded properly
-if (streamUrl && streamUrl.startsWith("http")) {
-  // JWPlayer setup
-  jwplayer("jwplayerDiv").setup({
-    file: streamUrl,
-    width: "100%",
-    height: "100%",
-    aspectratio: "16:9",
-    autostart: true,
-    mute: false,
-    preload: "auto",
-    cast: { appid: "CC1AD845" }
-  });
-} else {
-  // If URL decoding fails, show an error
-  document.body.innerHTML = "Invalid stream URL.";
-}
-      // 🟢 Update Firebase when local player state changes
-      player.on("play", () => {
-        playerStateRef.set({ state: "play" });
-      });
-
-      player.on("pause", () => {
-        playerStateRef.set({ state: "pause" });
-      });
-
-      // 🟣 Listen to Firebase and sync player accordingly
-      playerStateRef.on("value", (snapshot) => {
-        const data = snapshot.val();
-        if (!data) return;
-
-        const currentState = player.getState();
-        if (data.state === "play" && currentState !== "playing") {
-          player.play();
-        } else if (data.state === "pause" && currentState !== "paused") {
-          player.pause();
-        }
-      });
-    } else {
-      document.getElementById("jwplayerDiv").innerHTML = "<p style='color:red; text-align:center;'>Invalid stream URL provided.</p>";
-    }
+    loadMatches();
   </script>
-
-  <!-- 🔻 Online Counter -->
-  <center class="mt-2">
-    <script src="//widget.supercounters.com/ssl/online_t.js"></script>
-    <script>sc_online_t(1707487,"Users Online","170ddb");</script>
-    <noscript><a href="https://www.supercounters.com/">supercounters.com</a></noscript>
-  </center>
-
-  <!-- 🔷 Telegram Button -->
-  <div class="bg-blue-600 w-full text-center py-3 mt-2">
-    <a href="https://t.me/cric_stream" target="_blank">
-      <button class="bg-white text-blue-700 px-4 py-2 rounded font-semibold shadow hover:bg-gray-100 transition">
-        Join Telegram
-      </button>
-    </a>
-  </div>
-
-  <!-- Ads -->
-  <div>
-    <script async="async" data-cfasync="false" src="//carryglanced.com/2346ffc02acfb9eb4451708a5df9f609/invoke.js"></script>
-    <div id="container-2346ffc02acfb9eb4451708a5df9f609"></div>
-  </div>
 </body>
 </html>
